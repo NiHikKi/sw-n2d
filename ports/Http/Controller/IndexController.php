@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace Ports\Http\Controller;
 
+use Application\Test;
+
 class IndexController
 {
-    public static function index(): string
+    private Test $test;
+
+    public function __construct(Test $test) {
+
+        $this->test = $test;
+    }
+
+    public function index(): string
     {
-        return 'test';
+        return $this->test->getString();
     }
 }

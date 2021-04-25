@@ -16,6 +16,7 @@ class ExceptionHandler
     public function handle(\Throwable $e, Request $request, Response $response): void
     {
         $this->jsonResponse($response, [
+            'type' => $e::class,
             'code' => $e->getCode(),
             'message' => $e->getMessage(),
             'file' => $e->getFile(),

@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Core\Container;
 
 use Core\Contract\DispatcherContract;
+use Core\Contract\RouterContract;
 use Core\Dispatcher\Dispatcher;
+use Core\Router\Router;
 use Psr\Container\ContainerInterface;
 
 class Container implements ContainerInterface
 {
     /** @var callable[]  */
     protected array $bindings = [
-        DispatcherContract::class => Dispatcher::class
+        DispatcherContract::class => Dispatcher::class,
+        RouterContract::class => Router::class,
     ];
 
     protected array $resolved = [];
@@ -60,7 +63,7 @@ class Container implements ContainerInterface
      * @param string $id
      * @return bool
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         return class_exists($id) || isset($this->bindings[$id]);
     }

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Core\Dispatcher;
 
 use Core\Container\Container;
+use Core\Contract\DispatcherContract;
+use Core\Http\Request;
+use Core\Http\Response;
 use FastRoute\Dispatcher as RouteDispatcher;
 use FastRoute\RouteCollector;
-use Swoole\Http\Request;
-use Swoole\Http\Response;
 use function FastRoute\simpleDispatcher;
 
-class Dispatcher
+class Dispatcher implements DispatcherContract
 {
     private RouteDispatcher $dispatcher;
     private Container $container;
@@ -31,8 +32,10 @@ class Dispatcher
 
     public function dispatch(Request $request, Response $response): void
     {
-        $httpMethod = $request->server['request_method'];
-        $uri = $request->server['request_uri'];
+        /** @var string $httpMethod */
+        $httpMethod = $request->server('request_method');
+        /** @var string $uri */
+        $uri = $request->server('request_uri');
 
         // Strip query string (?foo=bar) and decode URI
         if (false !== $pos = strpos($uri, '?')) {

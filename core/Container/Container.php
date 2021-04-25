@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Core\Container;
 
-use Psr\Container\ContainerExceptionInterface;
+use Core\Contract\DispatcherContract;
+use Core\Dispatcher\Dispatcher;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class Container implements ContainerInterface
 {
     /** @var callable[]  */
-    protected array $bindings = [];
+    protected array $bindings = [
+        DispatcherContract::class => Dispatcher::class
+    ];
 
     protected array $resolved = [];
 
@@ -19,18 +21,30 @@ class Container implements ContainerInterface
      * @param class-string $id
      * @return mixed
      */
-    public function get(string $id): mixed
+    public function get($id)
     {
-        if ($id === static::class) return $this;
+        if ($id === static::class) {
+            return $this;
+        }
 
         if (isset($this->resolved[$id])) {
             return $this->resolved[$id];
         }
 
         if (isset($this->bindings[$id])) {
+            if (class_exists($this->bindings[$id])) {
+                return $this->newInstance($this->bindings[$id]);
+            }
             return $this->bindings[$id]($this);
         }
+        $instance = $this->newInstance($id);
 
+        return $instance;
+    }
+
+    public function newInstance(string $id): mixed
+    {
+        PrintLog('instance '.$id);
         $reflectionClass = new \ReflectionClass($id);
 
         $dependencies = $this->buildDependencies($reflectionClass);
@@ -42,7 +56,11 @@ class Container implements ContainerInterface
         return $instance;
     }
 
-    public function has(string $id): bool
+    /**
+     * @param string $id
+     * @return bool
+     */
+    public function has($id)
     {
         return class_exists($id) || isset($this->bindings[$id]);
     }

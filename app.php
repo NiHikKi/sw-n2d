@@ -5,11 +5,16 @@ declare(strict_types=1);
 use Core\Application;
 use Swoole\Http\Server;
 
+function PrintLog(string $str): void {
+    echo sprintf("[%s] %s" . PHP_EOL, date("Y-m-d H:i:s"), $str);
+}
+
 require_once __DIR__ . '/vendor/autoload.php';
+
 
 $http = new Swoole\Http\Server("127.0.0.1", 8000);
 
-$application = new Application();
+$application = new Application($http);
 
 $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Response $response) use ($application) {
     $application->handle($request, $response);
@@ -17,10 +22,10 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
 
 
 $http->on('start', function (Server $server) {
-    echo "Server listening on {$server->host}:{$server->port}";
+    PrintLog("Server listening on {$server->host}:{$server->port}");
 });
 
 $http->on('shutdown', function (Server $server) {
-    echo "Server is shutting down.";
+    PrintLog("Server is shutting down.");
 });
 $http->start();

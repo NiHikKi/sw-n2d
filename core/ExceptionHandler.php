@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Core;
 
-use Swoole\Http\Request;
-use Swoole\Http\Response;
+use Core\Http\Request;
+use Core\Http\Response;
 
 class ExceptionHandler
 {

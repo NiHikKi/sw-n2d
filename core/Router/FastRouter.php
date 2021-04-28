@@ -12,9 +12,9 @@ use FastRoute\Dispatcher;
 use FastRoute\Dispatcher as RouteDispatcher;
 use function FastRoute\simpleDispatcher;
 
-class Router implements RouterContract
+class FastRouter implements RouterContract
 {
-    private RouteCollection $routes;
+    private Dispatcher $dispatcher;
 
     public function __construct() {
         /**
@@ -22,12 +22,7 @@ class Router implements RouterContract
          * @var callable $routeCollectorFn
          */
         $routeCollectorFn = include __DIR__.'/../../routes/api.php';
-        $this->routes = new RouteCollection();
-        $routeCollectorFn($this->routes);
-        $this->routes->buildTree();
-
-        PrintLog($this->routes->match('GET', '/users'));
-        PrintLog($this->routes->match('GET', '/users/123'));
+        $this->dispatcher = simpleDispatcher($routeCollectorFn);
     }
 
 
@@ -44,9 +39,7 @@ class Router implements RouterContract
         }
         $uri = rawurldecode($uri);
 
-        $route = $this->routes->match($httpMethod, $uri);
-
-        return [$route->action, []];
+        $routeInfo = $this->dispatcher->dispatch($httpMethod, $uri);
 
         switch ($routeInfo[0]) {
             case RouteDispatcher::NOT_FOUND:

@@ -1,11 +1,11 @@
 <?php
 
-use FastRoute\RouteCollector;
+use Core\Router\Route;
+use Core\Router\RouteCollection;
+use Ports\Http\Controller\IndexController;
 
-return function(RouteCollector $r) {
-    $r->addRoute('GET', '/users', [\Ports\Http\Controller\IndexController::class, 'index']);
-    // {id} must be a number (\d+)
-    $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
-    // The /{title} suffix is optional
-    $r->addRoute('GET', '/articles/{id:\d+}[/{title}]', 'get_article_handler');
+return function(RouteCollection $r) {
+    $r->add(Route::get('/users', [IndexController::class, 'index'])->name('users.index'));
+    $r->add(Route::get('/users/{id:\d+}', [IndexController::class, 'view'])->name('users.view'));
+
 };

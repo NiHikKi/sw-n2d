@@ -5,7 +5,10 @@ declare(strict_types=1);
 use Core\Application;
 use Swoole\Http\Server;
 
-function PrintLog(string $str): void {
+function PrintLog(mixed $str): void {
+    if (!is_string($str)) {
+        $str = \Core\Json\Json::encode($str);
+    }
     echo sprintf("[%s] %s" . PHP_EOL, date("Y-m-d H:i:s"), $str);
 }
 

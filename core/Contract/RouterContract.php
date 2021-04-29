@@ -13,5 +13,5 @@ interface RouterContract
     /**
      * @throws NotFoundHttpException|MethodNotAllowedHttpException
      */
-    public function match(Request $request);
+    public function match(Request $request): array;
 }

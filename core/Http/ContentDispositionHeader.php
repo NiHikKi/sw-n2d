@@ -66,7 +66,7 @@ final class ContentDispositionHeader
 
         $fileName = str_replace(['%', '/', '\\'], '_', $fileName);
 
-        $fallbackName = str_replace("\r\n", '_', $fallbackName);
+        $fallbackName = str_replace("\r\n", '_', $fileName);
         $fallbackName = preg_replace('/[^\x20-\x7e]/u', '_', $fallbackName);
         $fallbackName = str_replace('"', '\\"', $fallbackName);
 

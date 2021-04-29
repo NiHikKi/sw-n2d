@@ -6,8 +6,7 @@ namespace Core\Http;
 
 class Response
 {
-
-    private ?\Swoole\Http\Response $response;
+    private ?\Swoole\Http\Response $response = null;
 
     public static function fromSwooleResponse(\Swoole\Http\Response $response): self
     {
@@ -35,6 +34,6 @@ class Response
 
     public function setHeader(string $name, string $value): void
     {
-        $this->response->setHeader($name, $value);
+        $this->response?->setHeader($name, $value);
     }
 }

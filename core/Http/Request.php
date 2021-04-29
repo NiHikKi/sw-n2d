@@ -6,7 +6,7 @@ namespace Core\Http;
 
 class Request
 {
-    private ?\Swoole\Http\Request $request;
+    private ?\Swoole\Http\Request $request = null;
 
     public static function fromSwooleRequest(\Swoole\Http\Request $request): self
     {

@@ -28,6 +28,11 @@ class RouteCollection implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress InvalidArrayOffset
+     * @psalm-suppress MixedArrayAssignment
+     */
     public function buildTree(): void
     {
         $this->routeTree = [
@@ -36,11 +41,13 @@ class RouteCollection implements \JsonSerializable
         ];
 
         foreach ($this->routes as $route) {
+            /** @var string $method */
             foreach ($route->method as $method) {
                 $pattern = $this->parsePattern($route->pattern);
                 $current = &$this->routeTree[$method];
 
-                foreach ($pattern as $i => $token) {
+                /** @var string $token */
+                foreach ($pattern as $token) {
                     if (str_starts_with($token, '{')) {
                         $current = &$current['{}'];
                         $paramToken = explode(':', trim($token, '{}'));
@@ -60,6 +67,10 @@ class RouteCollection implements \JsonSerializable
      * @param string $uri
      * @return array{0: Route, 1: array}
      * @throws NotFoundHttpException
+     *
+     * @psalm-suppress MixedArrayAccess
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArrayOffset
      */
     public function match(string $method, string $uri): array
     {
@@ -67,7 +78,7 @@ class RouteCollection implements \JsonSerializable
         $params = [];
 
         $current = &$this->routeTree[$method];
-        foreach ($pattern as $i => $token) {
+        foreach ($pattern as $token) {
             if (isset($current[$token])) {
                 $current = &$current[$token];
             } elseif (isset($current['{}'])) {
@@ -76,7 +87,12 @@ class RouteCollection implements \JsonSerializable
             }
         }
 
-        return [$current[0], $params] ?? throw new NotFoundHttpException();
+        if (isset($current[0])) {
+            /** @var array{0: Route} $current */
+            return [$current[0], $params];
+        }
+
+        throw new NotFoundHttpException();
     }
 
     private function parsePattern(string $pattern): array

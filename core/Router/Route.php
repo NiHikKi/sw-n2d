@@ -8,9 +8,9 @@ use Core\Http\Method;
 
 class Route
 {
-    /** @var callable $action */
+    /** @var array{0: class-string, 1: string}|callable $action */
     public $action;
-    public ?string $name;
+    public ?string $name = null;
     public string $pattern;
     public array $method;
 
@@ -18,7 +18,7 @@ class Route
      * Route constructor.
      * @param array $method
      * @param string $pattern
-     * @param callable $action
+     * @param array{0: class-string, 1: string}|callable $action
      */
     public function __construct(array $method, string $pattern, $action) {
         $this->method = $method;
@@ -27,7 +27,9 @@ class Route
     }
 
     /**
-     * @param callable $action
+     * @param string $pattern
+     * @param array{0: class-string, 1: string}|callable $action
+     * @return Route
      */
     public static function get(string $pattern, $action): self {
         return new self([Method::GET], $pattern, $action);

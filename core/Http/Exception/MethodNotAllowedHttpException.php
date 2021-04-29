@@ -10,7 +10,7 @@ class MethodNotAllowedHttpException extends \Exception
 {
     private array $allowedMethods;
 
-    public function __construct($allowedMethods, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct(array $allowedMethods, string $message = "", int $code = 0, Throwable $previous = null)
     {
         $this->allowedMethods = $allowedMethods;
         parent::__construct($message, $code, $previous);

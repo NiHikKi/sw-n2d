@@ -24,16 +24,16 @@ class Dispatcher implements DispatcherContract
         $this->router = $router;
     }
 
+    /** @psalm-suppress MixedAssignment,MixedArgument,MixedMethodCall */
     public function dispatch(Request $request, Response $response): void
     {
         $matchRoute = $this->router->match($request);
+        /** @var array{0: class-string, 1: string} $handler */
         $handler = $matchRoute[0];
+        /** @var array $vars */
         $vars = $matchRoute[1];
 
-        PrintLog($handler);
-        PrintLog($vars);
-
         $handlerInstance = $this->container->get($handler[0]);
-        $response->end(call_user_func([$handlerInstance, $handler[1]], ...$vars));
+        $response->end($handlerInstance->{$handler[1]}(...$vars));
     }
 }

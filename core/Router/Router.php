@@ -27,8 +27,12 @@ class Router implements RouterContract
         $this->routes->buildTree();
     }
 
-
-    public function match(Request $request)
+    /**
+     * @param Request $request
+     * @return array{0: array{0: class-string, 1: string}|callable, 1: array}
+     * @throws NotFoundHttpException
+     */
+    public function match(Request $request): array
     {
         /** @var string $httpMethod */
         $httpMethod = $request->server('request_method');

@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 
 class Container implements ContainerInterface
 {
-    /** @var callable[]  */
+    /** @var array<array-key, class-string|callable>  */
     protected array $bindings = [
         DispatcherContract::class => Dispatcher::class,
         RouterContract::class => Router::class,
@@ -21,33 +21,46 @@ class Container implements ContainerInterface
     protected array $resolved = [];
 
     /**
-     * @param class-string $id
+     * @template T
+     * @psalm-suppress MoreSpecificImplementedParamType
+     * @param class-string<T> $id
      * @return mixed
+     * @psalm-return T
      */
-    public function get($id)
+    public function get(string $id)
     {
-        if ($id === static::class) {
+        if ($id === self::class) {
+            /** @var T */
             return $this;
         }
 
         if (isset($this->resolved[$id])) {
+            /** @var T */
             return $this->resolved[$id];
         }
 
         if (isset($this->bindings[$id])) {
-            if (class_exists($this->bindings[$id])) {
+            if (is_string($this->bindings[$id]) && class_exists($this->bindings[$id])) {
+                /** @var T */
                 return $this->newInstance($this->bindings[$id]);
             }
+
+            /** @var T */
             return $this->bindings[$id]($this);
         }
-        $instance = $this->newInstance($id);
 
-        return $instance;
+        /** @var T */
+        return $this->newInstance($id);
     }
 
+    /**
+     * @template T
+     * @param class-string<T> $id
+     * @return T
+     * @throws \ReflectionException
+     */
     public function newInstance(string $id): mixed
     {
-        PrintLog('instance '.$id);
         $reflectionClass = new \ReflectionClass($id);
 
         $dependencies = $this->buildDependencies($reflectionClass);
@@ -70,7 +83,7 @@ class Container implements ContainerInterface
 
     /**
      * @param \ReflectionClass $reflectionClass
-     * @return mixed[]
+     * @return array<int, mixed>
      */
     private function buildDependencies(\ReflectionClass $reflectionClass): array
     {

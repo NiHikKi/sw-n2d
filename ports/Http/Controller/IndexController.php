@@ -19,4 +19,14 @@ class IndexController
     {
         return $this->test->getString();
     }
+
+    public function view(int $id): string
+    {
+        return (string)$id;
+    }
+
+    public function testVars(int $id, string $name, string $val): string
+    {
+        return "$id - $name - $val";
+    }
 }

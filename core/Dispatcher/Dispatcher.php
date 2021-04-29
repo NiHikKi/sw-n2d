@@ -30,7 +30,10 @@ class Dispatcher implements DispatcherContract
         $handler = $matchRoute[0];
         $vars = $matchRoute[1];
 
+        PrintLog($handler);
+        PrintLog($vars);
+
         $handlerInstance = $this->container->get($handler[0]);
-        $response->end(call_user_func([$handlerInstance, $handler[1]], $vars));
+        $response->end(call_user_func([$handlerInstance, $handler[1]], ...$vars));
     }
 }

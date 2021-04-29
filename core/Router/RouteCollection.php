@@ -43,6 +43,9 @@ class RouteCollection implements \JsonSerializable
                 foreach ($pattern as $i => $token) {
                     if (str_starts_with($token, '{')) {
                         $current = &$current['{}'];
+                        $paramToken = explode(':', trim($token, '{}'));
+                        $current[1] = $paramToken[0];
+                        $current[2] = $paramToken[1] ?? '*';
                     } else {
                         $current = &$current[$token];
                     }
@@ -52,9 +55,16 @@ class RouteCollection implements \JsonSerializable
         }
     }
 
-    public function match(string $method, string $uri): Route
+    /**
+     * @param string $method
+     * @param string $uri
+     * @return array{0: Route, 1: array}
+     * @throws NotFoundHttpException
+     */
+    public function match(string $method, string $uri): array
     {
         $pattern = $this->parsePattern($uri);
+        $params = [];
 
         $current = &$this->routeTree[$method];
         foreach ($pattern as $i => $token) {
@@ -62,10 +72,11 @@ class RouteCollection implements \JsonSerializable
                 $current = &$current[$token];
             } elseif (isset($current['{}'])) {
                 $current = &$current['{}'];
+                $params[$current[1]] = $token;
             }
         }
 
-        return $current[0] ?? throw new NotFoundHttpException();
+        return [$current[0], $params] ?? throw new NotFoundHttpException();
     }
 
     private function parsePattern(string $pattern): array

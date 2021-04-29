@@ -25,9 +25,6 @@ class Router implements RouterContract
         $this->routes = new RouteCollection();
         $routeCollectorFn($this->routes);
         $this->routes->buildTree();
-
-        PrintLog($this->routes->match('GET', '/users'));
-        PrintLog($this->routes->match('GET', '/users/123'));
     }
 
 
@@ -44,22 +41,8 @@ class Router implements RouterContract
         }
         $uri = rawurldecode($uri);
 
-        $route = $this->routes->match($httpMethod, $uri);
+        [$route, $params] = $this->routes->match($httpMethod, $uri);
 
-        return [$route->action, []];
-
-        switch ($routeInfo[0]) {
-            case RouteDispatcher::NOT_FOUND:
-                throw new NotFoundHttpException();
-            case RouteDispatcher::METHOD_NOT_ALLOWED:
-                $allowedMethods = $routeInfo[1];
-                throw new MethodNotAllowedHttpException($allowedMethods);
-            case RouteDispatcher::FOUND:
-                /** @var array{0: class-string, 1: string} $handler */
-                $handler = $routeInfo[1];
-                $vars = $routeInfo[2];
-
-                return [$handler, $vars];
-        }
+        return [$route->action, $params];
     }
 }

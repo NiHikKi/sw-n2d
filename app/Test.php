@@ -8,11 +8,13 @@ class Test
 {
     private DependencyTest $dependency;
 
-    public function __construct(DependencyTest $dependency) {
+    public function __construct(DependencyTest $dependency)
+    {
         $this->dependency = $dependency;
     }
 
-    public function getString(): string {
+    public function getString(): string
+    {
         return $this->dependency->log();
     }
 }

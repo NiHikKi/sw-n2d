@@ -11,6 +11,7 @@ use Core\Http\Request;
 use Core\Http\Response;
 use FastRoute\Dispatcher as RouteDispatcher;
 use FastRoute\RouteCollector;
+
 use function FastRoute\simpleDispatcher;
 
 class Dispatcher implements DispatcherContract

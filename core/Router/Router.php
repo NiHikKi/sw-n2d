@@ -10,18 +10,20 @@ use Core\Http\Exception\NotFoundHttpException;
 use Core\Http\Request;
 use FastRoute\Dispatcher;
 use FastRoute\Dispatcher as RouteDispatcher;
+
 use function FastRoute\simpleDispatcher;
 
 class Router implements RouterContract
 {
     private RouteCollection $routes;
 
-    public function __construct() {
+    public function __construct()
+    {
         /**
          * @psalm-suppress MissingFile
          * @var callable $routeCollectorFn
          */
-        $routeCollectorFn = include __DIR__.'/../../routes/api.php';
+        $routeCollectorFn = include __DIR__ . '/../../routes/api.php';
         $this->routes = new RouteCollection();
         $routeCollectorFn($this->routes);
         $this->routes->buildTree();

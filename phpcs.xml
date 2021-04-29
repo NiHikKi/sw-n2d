@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="PSR12">
+    <arg name="extensions" value="php"/>
+    <arg name="error-severity" value="1"/>
+    <arg name="warning-severity" value="6"/>
+
+    <rule ref="PSR12"/>
+
+    <file>./</file>
+
+    <exclude-pattern>vendor</exclude-pattern>
+    <exclude-pattern>stubs</exclude-pattern>
+</ruleset>

@@ -9,8 +9,8 @@ use Core\Http\Response;
 
 class ExceptionHandler
 {
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
     public function handle(\Throwable $e, Request $request, Response $response): void
@@ -27,7 +27,7 @@ class ExceptionHandler
 
     private function jsonResponse(Response $response, mixed $data): void
     {
-        $response->setHeader('Content-type','application/json');
+        $response->setHeader('Content-type', 'application/json');
         $response->end(json_encode($data));
     }
 }

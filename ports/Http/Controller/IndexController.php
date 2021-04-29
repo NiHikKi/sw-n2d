@@ -10,7 +10,8 @@ class IndexController
 {
     private Test $test;
 
-    public function __construct(Test $test) {
+    public function __construct(Test $test)
+    {
 
         $this->test = $test;
     }

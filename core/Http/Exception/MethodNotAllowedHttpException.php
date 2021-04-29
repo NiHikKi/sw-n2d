@@ -23,5 +23,4 @@ class MethodNotAllowedHttpException extends \Exception
     {
         return $this->allowedMethods;
     }
-
 }

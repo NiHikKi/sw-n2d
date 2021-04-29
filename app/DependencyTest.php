@@ -6,11 +6,12 @@ namespace Application;
 
 class DependencyTest
 {
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
-    public function log(): string {
+    public function log(): string
+    {
         return 'test';
     }
 }

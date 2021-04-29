@@ -20,9 +20,10 @@ class Application
 
     private Server $server;
 
-    public function __construct(Server $server) {
+    public function __construct(Server $server)
+    {
 
-        echo "Creating application".PHP_EOL;
+        echo "Creating application" . PHP_EOL;
 
         self::$instance = $this;
         $this->server = $server;
@@ -73,5 +74,4 @@ class Application
     {
         return $this->server;
     }
-
 }

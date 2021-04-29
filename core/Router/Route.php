@@ -20,7 +20,8 @@ class Route
      * @param string $pattern
      * @param array{0: class-string, 1: string}|callable $action
      */
-    public function __construct(array $method, string $pattern, $action) {
+    public function __construct(array $method, string $pattern, $action)
+    {
         $this->method = $method;
         $this->pattern = $pattern;
         $this->action = $action;
@@ -31,18 +32,21 @@ class Route
      * @param array{0: class-string, 1: string}|callable $action
      * @return Route
      */
-    public static function get(string $pattern, $action): self {
+    public static function get(string $pattern, $action): self
+    {
         return new self([Method::GET], $pattern, $action);
     }
 
     /**
      * @param callable $action
      */
-    public static function post(string $pattern, $action): self {
+    public static function post(string $pattern, $action): self
+    {
         return new self([Method::POST], $pattern, $action);
     }
 
-    public function name(string $name): self {
+    public function name(string $name): self
+    {
         $this->name = $name;
 
         return $this;

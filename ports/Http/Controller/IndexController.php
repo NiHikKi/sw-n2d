@@ -26,7 +26,7 @@ class IndexController
         return (string)$id;
     }
 
-    public function testVars(int $id, string $name, string $val): string
+    public function testVars(string $id, string $name, string $val): string
     {
         return "$id - $name - $val";
     }

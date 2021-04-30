@@ -16,7 +16,7 @@ function PrintLog(mixed $str): void
 require_once __DIR__ . '/vendor/autoload.php';
 
 
-$http = new Swoole\Http\Server("127.0.0.1", 8000);
+$http = new Swoole\Http\Server("*", 8000);
 
 $application = new Application($http);
 
